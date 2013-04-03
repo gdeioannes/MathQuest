@@ -1,0 +1,327 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<style>
+
+
+body{
+	font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+}
+div{
+	background:#666;
+	width:100px;
+	height:100px;
+	text-align:center;
+	color:#FFF;
+	font-size:18px;
+	background:#96C;
+}
+
+#numContainer{
+	float:left;
+}
+
+#counter{
+	margin:0px;
+	background:#9F0;
+	width:100px;
+	height:50px;
+	font-size:30px;
+	float:left;
+	color:#333;
+}
+
+#counter2{
+	margin:0px;
+	background:#9F0;
+	width:100px;
+	height:50px;
+	font-size:20px;
+	float:left;
+	color:#333;
+}
+
+button{
+	float:left;
+	font-size:30px;
+}
+
+#container{
+	width:500px;
+	height:500px;
+	background:#96C;
+}
+
+#divisiblenum{
+	color:#333;
+	font-size:36px;
+	float:left;
+	background:inherit;
+	width:400px;;
+	height:50px;
+	
+}
+
+#divisiblenum2{
+	color:#333;
+	font-size:36px;
+	float:left;
+	background:inherit;
+	width:400px;;
+	height:50px;
+	
+}
+
+.numeroJuego{
+	float:left;
+	background:#333;
+	font-size:48px;
+}
+
+#infoContainer{
+	background:#F60;
+	width:500px;
+	height:100px;
+}
+
+#scoreContainer{
+	float:left;
+}
+
+#lifeCount{
+	font-size:30px;
+	margin:none;
+	float:left;
+	padding:none;
+	height:50px;
+	background:none;
+	color:#333;
+}
+
+#level{
+	font-size:30px;
+	margin:none;
+	float:left;
+	padding:none;
+	height:50px;
+	background:none;
+	color:#333;
+}
+
+#play{
+	float:left;	
+}
+
+#optionsContainer{
+	background:#C1C1C1;
+	width:500px;
+	height:50px;
+}
+
+#timer{
+	background:#666;
+	width:500px;
+	font-size:30px;
+	height:50px;
+}
+
+#buttonNext{
+	float:right;
+}
+
+</style>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=no" />
+
+<title>MathQuest</title>
+</head>
+  <div id="infoContainer">
+	<div id="scoreContainer">
+        <div id="counter2">Score</div>
+        <div id="counter">0</div>
+	</div>
+  <div id="divisiblenum2">Numbers divisible by</div>
+  <div id="divisiblenum"></div>
+</div>
+<div id="timer">Time:00:00</div>
+<div id="container">Hit Play to start!!</div>
+<div id="optionsContainer">
+	<button id="play" type="button" >PLAY</button>
+    <div id="level">Level:1|</div>
+    <div id="lifeCount">Life:3</div>
+    <button id="buttonNext" type="button" >Next</button>
+</div>
+
+<script src="jquery-1.9.1.min.js"></script>
+<script type="text/javascript" async="" src="http://www.google-analytics.com/ga.js"></script>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-38381950-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+<script>
+$(document).ready(function(){
+	
+	var divisor=0;
+	var dividido=0;
+	var count=0;
+	var life=3;
+	var timeMin=1;
+	var timeSg=30;
+	var numberLevel=5;
+	var level=1;
+	var riselevel=numberLevel*10;
+	
+	var actionPlaying=false;
+	var animate=setInterval(timeGo,1000);
+	var numero1='<div id="numContainer"><div class="numeroJuego">'+Math.round(Math.random()*100)+'</div></div>';
+	
+	var inNum=0;
+	var numProb=0;
+	function fill(){
+		divisor=parseInt($("#divisiblenum").text());
+		for(var i=0;i<25;i++){
+			inNum=Math.round(1+Math.random()*(numberLevel-1)*10);
+			if(numProb<Math.round(Math.random()*100)){
+
+				inNum=divisor*Math.round(Math.round(2+(Math.random()*(numberLevel-2))));
+			}
+			
+			numero1='<div id="numContainer"><div class="numeroJuego">'+inNum+'</div></div>';
+			$("#container").append(numero1);
+		}
+	}
+	
+	function trasarnumero(){
+		$(".numeroJuego").click(function(){
+			makeCount($(this));
+		});
+	}
+	
+	function makeCount(m){
+		divisor=parseInt($("#divisiblenum").text());
+		dividido=parseInt(m.text());
+
+		if((isNaN(parseInt(m.text())))==false){
+			if(dividido%divisor==0){
+				count+=divisor;
+				m.html();
+				m.html('<img src="good.jpg">');
+				timeSg+=Math.round((divisor/2));
+				if(timeSg>60){
+					timeMin++;
+					timeSg=timeSg%60;
+						
+				}
+				
+				if(count>riselevel){
+					level++;
+					numberLevel++;
+					numProb+=2;
+					$("#level").text("Level:"+level+"|");
+					riselevel+=numberLevel*10;
+				}	
+			}else{
+				life--;
+				m.html();
+				m.html('<img src="bad.jpg">');
+				$("#lifeCount").text("Life:"+life);
+				if(life<=0){
+					loose();	
+				}
+			}
+			
+			$("#counter").text(count);
+		}
+	}
+	
+	$("#play").click(function(){
+		numProb=70;
+		loose();
+		$("#divisiblenum").text(Math.round(2+Math.random()*(numberLevel-2)));
+		$("#container").html("");
+		$("#play").text("Restart");
+		fill();
+		trasarnumero();
+		actionPlaying=true;
+		$("#lifeCount").text("Life:"+life);
+		count=0;
+		$("#counter").text(count);
+		time=180;
+		timeMin=1;
+		timeSg=30;
+		level=1;
+		$("#level").text("Level:1|");
+		riselevel=numberLevel*10;
+		numberLevel=5;
+		
+	})
+	
+	$("#buttonNext").click(function(){
+		if(actionPlaying==true){
+			$("#divisiblenum").text(Math.round(2+(Math.random()*(numberLevel-2))));
+			$("#container").html("");
+			fill();
+			trasarnumero();
+		}
+	});
+	
+	function loose(){
+		$("#divisiblenum").text(Math.round(2+(Math.random()*(numberLevel-2))));
+		$("#container").html("");
+		$("#container").text("You loose, good luck next time! \n Press play to start again");
+		$("#play").text("Play");
+		life=3;
+		$("#lifeCount").text("Life:0");
+		actionPlaying=false;
+
+	}
+	
+	
+	
+	function timeGo(){
+		if(actionPlaying==true){
+			if(timeMin>10 && timeSg>10){
+				$("#timer").text("Time:"+timeMin+":"+timeSg);
+			}
+			
+			if(timeMin>10 && timeSg<10){
+				$("#timer").text("Time:"+timeMin+":0"+timeSg);
+			}
+			
+			if(timeMin<10 && timeSg>10){
+				$("#timer").text("Time:0"+timeMin+":"+timeSg);
+			}
+			
+			if(timeMin<10 && timeSg<10){
+				$("#timer").text("Time:0"+timeMin+":0"+timeSg);
+			}
+			
+			if(timeSg<=0){
+				timeSg=60;	
+				timeMin--;
+			}
+			timeSg--;
+			
+			if(timeMin<=0 && timeSg<=0){
+				loose();
+			}
+		}
+	}
+		
+});
+
+	
+
+</script>
+<body>
+</body>
+</html>
