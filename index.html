@@ -267,6 +267,8 @@ $(document).ready(function(){
 	}
 	
 	$("#play").click(function(){
+		numberLevel=5;
+		riselevel=numberLevel*10;
 		numProb=70;
 		loose();
 		$("#divisiblenum").text(Math.round(2+Math.random()*(numberLevel-2)));
@@ -283,8 +285,6 @@ $(document).ready(function(){
 		timeSg=30;
 		level=1;
 		$("#level").text("Level:1|");
-		riselevel=numberLevel*10;
-		numberLevel=5;
 		
 	})
 	
