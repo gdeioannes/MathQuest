@@ -27,8 +27,8 @@ div{
 	margin:0px;
 	background:#9F0;
 	width:100%;
-	height:50px;
-	font-size:30px;
+	height:70%;
+	font-size:50px;
 	float:left;
 	color:#333;
 }
@@ -37,7 +37,7 @@ div{
 	margin:0px;
 	background:#9F0;
 	width:100%;
-	height:50px;
+	height:30%;
 	font-size:20px;
 	float:left;
 	color:#333;
@@ -150,6 +150,11 @@ button{
 	
 }
 
+p{
+	font-size:16px;
+	margin:0px;
+}
+
 </style>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -176,6 +181,8 @@ button{
     <button id="buttonNext" type="button" >Next</button>
 </div>
 
+
+
 <script src="jquery-1.9.1.min.js"></script>
 <script type="text/javascript" async="" src="http://www.google-analytics.com/ga.js"></script>
 <script type="text/javascript">
@@ -193,7 +200,6 @@ button{
 </script>
 <script>
 $(document).ready(function(){
-	
 	var divisor=0;
 	var dividido=0;
 	var count=0;
@@ -203,7 +209,7 @@ $(document).ready(function(){
 	var numberLevel=5;
 	var level=1;
 	var riselevel=numberLevel*10;
-	
+	var name="N/A";
 	var actionPlaying=false;
 	var animate=setInterval(timeGo,1000);
 	var numero1='<div id="numContainer"><div class="numeroJuego">'+Math.round(Math.random()*100)+'</div></div>';
@@ -271,7 +277,7 @@ $(document).ready(function(){
 		numberLevel=5;
 		riselevel=numberLevel*10;
 		numProb=70;
-		loose();
+		resetVars();
 		$("#divisiblenum").text(Math.round(2+Math.random()*(numberLevel-2)));
 		$("#container").html("");
 		$("#play").text("Restart");
@@ -298,14 +304,34 @@ $(document).ready(function(){
 		}
 	});
 	
-	function loose(){
+	function resetVars(){
 		$("#divisiblenum").text(Math.round(2+(Math.random()*(numberLevel-2))));
 		$("#container").html("");
-		$("#container").text("Nice Score!! Keep playing!!!"+count+"!!!");
+		$("#play").text("Play");
+		life=3;
+		$("#lifeCount").text("Life:0");
+	}
+	
+	function loose(){
+		var name=prompt("Enter your Name");
+		 $.ajax({
+		type:"POST",
+		url: "changetxt.php",
+		data: "name=" + name + "\u0026level="+ level + "\u0026count="+ count,
+		success: function(r){
+
+		}
+		});
+		
+		$("#divisiblenum").text(Math.round(2+(Math.random()*(numberLevel-2))));
+		$("#container").html("");
+		$("#container").text("Nice Score!! Keep playing!!!"+count+"!!! \n" + $("#container").load("puntages.txt"));
 		$("#play").text("Play");
 		life=3;
 		$("#lifeCount").text("Life:0");
 		actionPlaying=false;
+		
+		
 
 	}
 	
@@ -342,6 +368,12 @@ $(document).ready(function(){
 	}
 		
 });
+
+
+///////////////////////////php/////////////////////////
+	
+
+
 
 	
 
